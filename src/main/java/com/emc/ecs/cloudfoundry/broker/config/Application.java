@@ -48,13 +48,12 @@ public class Application {
     @Bean
     public Connection ecsConnection() {
 	if (broker.getCertificate() != null) {
-	    logger.info("Instantiating esc connection with certificate");
-        URL certificate = Thread.currentThread().getContextClassLoader()
-                .getResource(broker.getCertificate());
+	    logger.info("Instantiating ecs connection with certificate");
+
         return new Connection(broker.getManagementEndpoint(),
-                broker.getUsername(), broker.getPassword(), certificate);
+                broker.getUsername(), broker.getPassword(), broker.getCertificate());
 	} else {
-        logger.info("Instantiating unencrypted esc connection");
+        logger.info("Instantiating unencrypted ecs connection");
 		return new Connection(broker.getManagementEndpoint(),
                 broker.getUsername(), broker.getPassword());
 	}

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "broker")
 public class BrokerConfig {
+    private static final String EMPTY_STRING = "";
     private String managementEndpoint;
     private String namespace;
     private String replicationGroup;
@@ -23,6 +24,7 @@ public class BrokerConfig {
     private String repositoryBucket = "repository";
     private String prefix = "ecs-cf-broker-";
     private String brokerApiVersion = "*";
+    // TODO Update docs to reflect adding cert as string not file
     private String certificate;
 
     public String getManagementEndpoint() {
@@ -140,6 +142,8 @@ public class BrokerConfig {
     }
 
     public String getCertificate() {
+        if (EMPTY_STRING.equals(certificate))
+            return null;
         return certificate;
     }
 
@@ -148,6 +152,8 @@ public class BrokerConfig {
     }
 
     public String getBaseUrl() {
+        if (EMPTY_STRING.equals(baseUrl))
+            return null;
         return baseUrl;
     }
 
@@ -156,6 +162,8 @@ public class BrokerConfig {
     }
 
     public String getObjectEndpoint() {
+        if (EMPTY_STRING.equals(objectEndpoint))
+            return null;
         return objectEndpoint;
     }
 
