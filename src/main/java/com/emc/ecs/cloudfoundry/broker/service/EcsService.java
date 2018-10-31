@@ -337,15 +337,22 @@ public class EcsService {
     Map<String, Object> createNamespace(String id, ServiceDefinitionProxy service,
                                         PlanProxy plan, Map<String, Object> parameters)
             throws EcsManagementClientException {
+
         if (namespaceExists(id))
             throw new ServiceInstanceExistsException(id, service.getId());
+
         if (parameters == null) parameters = new HashMap<>();
+
+        logger.info(String.format("Creating namespace $s", id))
+
         parameters.putAll(plan.getServiceSettings());
         parameters.putAll(service.getServiceSettings());
+
         NamespaceAction.create(connection, new NamespaceCreate(prefix(id),
                 replicationGroupID, parameters));
 
-        if (parameters.containsKey(QUOTA)) {
+        if (parameters.containsKey(QUOTA) && parameters.get(QUOTA) != null) {
+            logger.info("Applying quota");
             @SuppressWarnings(UNCHECKED)
             Map<String, Integer> quota = (Map<String, Integer>) parameters
                     .get(QUOTA);
@@ -355,6 +362,7 @@ public class EcsService {
         }
 
         if (parameters.containsKey(RETENTION)) {
+            logger.info("Applying retention policy");
             @SuppressWarnings(UNCHECKED)
             Map<String, Integer> retention = (Map<String, Integer>) parameters
                     .get(RETENTION);

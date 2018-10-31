@@ -30,7 +30,7 @@ public class PlanCollectionInstance {
     private String costUnit;
 
     @JsonProperty("cost_usd")
-    private String costUSD;
+    private Float costUSD;
 
     @JsonProperty("default_retention")
     private String defaultRetention;
@@ -86,7 +86,7 @@ public class PlanCollectionInstance {
         this.costUnit = costUnit;
     }
 
-    public void setCostUSD(String costUSD) {
+    public void setCostUSD(Float costUSD) {
         this.costUSD = costUSD;
     }
 
