@@ -16,9 +16,12 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.servicebroker.model.SharedVolumeDevice;
-import org.springframework.cloud.servicebroker.model.VolumeDevice;
-import org.springframework.cloud.servicebroker.model.VolumeMount;
+//import org.springframework.cloud.servicebroker.model.SharedVolumeDevice;
+import org.springframework.cloud.servicebroker.model.binding.SharedVolumeDevice;
+//import org.springframework.cloud.servicebroker.model.VolumeDevice;
+import org.springframework.cloud.servicebroker.model.binding.VolumeDevice;
+//import org.springframework.cloud.servicebroker.model.VolumeMount;
+import org.springframework.cloud.servicebroker.model.binding.VolumeMount;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;

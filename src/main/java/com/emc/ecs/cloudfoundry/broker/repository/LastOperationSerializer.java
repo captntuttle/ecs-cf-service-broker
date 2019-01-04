@@ -2,7 +2,8 @@ package com.emc.ecs.cloudfoundry.broker.repository;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.springframework.cloud.servicebroker.model.OperationState;
+//import org.springframework.cloud.servicebroker.model.OperationState;
+import org.springframework.cloud.servicebroker.model.instance.OperationState;
 
 @SuppressWarnings("unused")
 public class LastOperationSerializer {
