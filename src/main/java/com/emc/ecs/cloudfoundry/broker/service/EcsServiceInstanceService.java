@@ -12,6 +12,7 @@ import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceDoesNotExistException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceUpdateNotSupportedException;
 import org.springframework.cloud.servicebroker.model.*;
+import org.springframework.cloud.servicebroker.model.instance.*;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceService;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +69,8 @@ public class EcsServiceInstanceService implements ServiceInstanceService {
             LOG.info("saving instance...");
             repository.save(instance);
 
-            return new CreateServiceInstanceResponse();
+//            return new CreateServiceInstanceResponse();
+            return CreateServiceInstanceResponse.builder().build();
         } catch (Exception e) {
             logger.error(format("Unexpected error creating service %s", serviceInstanceId), e);
             throw new ServiceBrokerException(e);
@@ -92,7 +94,8 @@ public class EcsServiceInstanceService implements ServiceInstanceService {
             LOG.info("removing instance from repo");
             repository.delete(serviceInstanceId);
 
-            return new DeleteServiceInstanceResponse();
+//            return new DeleteServiceInstanceResponse();
+            return DeleteServiceInstanceResponse.builder().build();
         } catch (Exception e) {
             throw new ServiceBrokerException(e);
         }
@@ -124,7 +127,9 @@ public class EcsServiceInstanceService implements ServiceInstanceService {
             // repository.delete(serviceInstanceId);
             instance.update(request, serviceSettings);
             repository.save(instance);
-            return new UpdateServiceInstanceResponse();
+//            return new UpdateServiceInstanceResponse();
+            return UpdateServiceInstanceResponse.builder().build();
+
         } catch (ServiceInstanceDoesNotExistException e) {
             // Rethrow "does not exist" so that it's not caught by the generic case
             throw e;
@@ -163,6 +168,7 @@ public class EcsServiceInstanceService implements ServiceInstanceService {
     @Override
     public GetLastServiceOperationResponse getLastOperation(
             GetLastServiceOperationRequest request) {
-        return new GetLastServiceOperationResponse();
+//        return new GetLastServiceOperationResponse();
+        return GetLastServiceOperationResponse.builder().build();
     }
 }

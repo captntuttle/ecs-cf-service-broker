@@ -5,9 +5,12 @@ import com.emc.ecs.cloudfoundry.broker.model.PlanProxy;
 import com.emc.ecs.cloudfoundry.broker.model.ServiceDefinitionProxy;
 import com.emc.ecs.cloudfoundry.broker.repository.ServiceInstanceBinding;
 import com.emc.ecs.cloudfoundry.broker.repository.ServiceInstanceRepository;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
-import org.springframework.cloud.servicebroker.model.DeleteServiceInstanceBindingRequest;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceAppBindingResponse;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceBindingRequest;
+//import org.springframework.cloud.servicebroker.model.DeleteServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.binding.DeleteServiceInstanceBindingRequest;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -51,9 +54,17 @@ abstract public class BindingWorkflowImpl implements BindingWorkflow {
         return binding;
     }
 
+//    public CreateServiceInstanceAppBindingResponse getResponse(Map<String, Object> credentials) {
+//        return new CreateServiceInstanceAppBindingResponse()
+//                .withCredentials(credentials);
+//    }
+
+//    This might work???
+//    Not confident about this builder being complete
     public CreateServiceInstanceAppBindingResponse getResponse(Map<String, Object> credentials) {
-        return new CreateServiceInstanceAppBindingResponse()
-                .withCredentials(credentials);
+        return CreateServiceInstanceAppBindingResponse.builder()
+                .credentials(credentials)
+                .build();
     }
 
     public Map<String, Object> getCredentials(String secretKey)

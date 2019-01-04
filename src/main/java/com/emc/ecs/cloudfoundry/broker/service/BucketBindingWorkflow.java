@@ -9,9 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceBindingExistsException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceDoesNotExistException;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
-import org.springframework.cloud.servicebroker.model.SharedVolumeDevice;
-import org.springframework.cloud.servicebroker.model.VolumeMount;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceAppBindingResponse;
+//import org.springframework.cloud.servicebroker.model.SharedVolumeDevice;
+import org.springframework.cloud.servicebroker.model.binding.SharedVolumeDevice;
+//import org.springframework.cloud.servicebroker.model.VolumeMount;
+import org.springframework.cloud.servicebroker.model.binding.VolumeMount;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -147,11 +150,26 @@ public class BucketBindingWorkflow extends BindingWorkflowImpl {
     @Override
     public CreateServiceInstanceAppBindingResponse getResponse(
             Map<String, Object> credentials) {
-        CreateServiceInstanceAppBindingResponse resp =
-                new CreateServiceInstanceAppBindingResponse()
-                .withCredentials(credentials);
-        if (volumeMounts != null)
-            resp = resp.withVolumeMounts(volumeMounts);
+
+//        CreateServiceInstanceAppBindingResponse resp =
+//                new CreateServiceInstanceAppBindingResponse()
+//                .withCredentials(credentials);
+
+//        if (volumeMounts != null)
+//            resp = resp.withVolumeMounts(volumeMounts);
+
+        CreateServiceInstanceAppBindingResponse resp;
+
+        if (volumeMounts != null) {
+            resp = CreateServiceInstanceAppBindingResponse.builder()
+                    .credentials(credentials)
+                    .volumeMounts(volumeMounts)
+                    .build();
+        } else {
+            resp = CreateServiceInstanceAppBindingResponse.builder()
+                    .credentials(credentials)
+                    .build();
+        }
 
         return resp;
     }
@@ -211,10 +229,21 @@ public class BucketBindingWorkflow extends BindingWorkflowImpl {
         opts.put("uid", String.valueOf(unixUid));
 
         List<VolumeMount> mounts = new ArrayList<>();
-        mounts.add(new VolumeMount(VOLUME_DRIVER, getContainerDir(parameters, bindingId),
-                VolumeMount.Mode.READ_WRITE, VolumeMount.DeviceType.SHARED,
-                new SharedVolumeDevice(volumeGUID, opts)));
 
+//        mounts.add(new VolumeMount(VOLUME_DRIVER, getContainerDir(parameters, bindingId),
+//                VolumeMount.Mode.READ_WRITE, VolumeMount.DeviceType.SHARED,
+//                new SharedVolumeDevice(volumeGUID, opts)));
+
+        mounts.add(VolumeMount.builder()
+                .driver(VOLUME_DRIVER)
+                .containerDir(getContainerDir(parameters, bindingId))
+                .mode(VolumeMount.Mode.READ_WRITE)
+                .deviceType(VolumeMount.DeviceType.SHARED)
+                .device(SharedVolumeDevice.builder()
+                        .volumeId(volumeGUID)
+                        .mountConfig(opts)
+                        .build())
+                .build());
         return mounts;
     }
 

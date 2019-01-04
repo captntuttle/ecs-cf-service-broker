@@ -6,7 +6,8 @@ import com.emc.ecs.cloudfoundry.broker.repository.ServiceInstanceBinding;
 import com.emc.ecs.cloudfoundry.broker.repository.ServiceInstanceRepository;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceBindingExistsException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceDoesNotExistException;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceAppBindingResponse;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -69,9 +70,15 @@ public class NamespaceBindingWorkflow extends BindingWorkflowImpl {
 
     @Override
     public CreateServiceInstanceAppBindingResponse getResponse(Map<String, Object> credentials) {
+        return CreateServiceInstanceAppBindingResponse.builder()
+                .credentials(credentials)
+                .build();
+    }
+
+    /*public CreateServiceInstanceAppBindingResponse getResponse(Map<String, Object> credentials) {
         return new CreateServiceInstanceAppBindingResponse()
                 .withCredentials(credentials);
-    }
+    }*/
 
     private String getS3Url(String endpoint, String secretKey) throws MalformedURLException {
         URL baseUrl = new URL(endpoint);

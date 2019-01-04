@@ -12,9 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceBindingDoesNotExistException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceBindingExistsException;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingResponse;
-import org.springframework.cloud.servicebroker.model.DeleteServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.exception.ServiceInstanceDoesNotExistException;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceBindingRequest;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingResponse;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceBindingResponse;
+//import org.springframework.cloud.servicebroker.model.DeleteServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.binding.DeleteServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.binding.DeleteServiceInstanceBindingResponse;
+import org.springframework.cloud.servicebroker.model.instance.DeleteServiceInstanceResponse;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceBindingService;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +82,7 @@ public class EcsServiceInstanceBindingService
     }
 
     @Override
-    public void deleteServiceInstanceBinding(
+    public DeleteServiceInstanceBindingResponse deleteServiceInstanceBinding(
             DeleteServiceInstanceBindingRequest request)
             throws ServiceBrokerException {
 
@@ -99,6 +105,11 @@ public class EcsServiceInstanceBindingService
             LOG.error("Error deleting binding: " + e);
             throw new ServiceBrokerException(e);
         }
+
+        // this is hacky -- returns useless object to satisfy return type.
+        // but it might work
+        // delete workflow should be reviewed in order to avoid this
+        return DeleteServiceInstanceBindingResponse.builder().build();
     }
 
     private BindingWorkflow getWorkflow(DeleteServiceInstanceBindingRequest deleteRequest)
