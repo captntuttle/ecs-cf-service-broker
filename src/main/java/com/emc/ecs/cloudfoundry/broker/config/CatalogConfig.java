@@ -5,7 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
-import org.springframework.cloud.servicebroker.model.Catalog;
+//import org.springframework.cloud.servicebroker.model.Catalog;
+import org.springframework.cloud.servicebroker.model.catalog.Catalog;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,11 +36,21 @@ public class CatalogConfig {
 
     @Bean
     public Catalog catalog() {
-        return new Catalog(mergeServices().stream()
-                .filter(ServiceDefinitionProxy::getActive)
-                .map(ServiceDefinitionProxy::unproxy)
-                .collect(Collectors.toList()));
+        return Catalog.builder()
+                .serviceDefinitions(
+                        mergeServices()
+                                .stream()
+                                .filter(ServiceDefinitionProxy::getActive)
+                                .map(ServiceDefinitionProxy::unproxy)
+                                .collect(Collectors.toList()))
+                .build();
     }
+//    public Catalog catalog() {
+//        return new Catalog(mergeServices().stream()
+//                .filter(ServiceDefinitionProxy::getActive)
+//                .map(ServiceDefinitionProxy::unproxy)
+//                .collect(Collectors.toList()));
+//    }
 
     public List<ServiceDefinitionProxy> mergeServices() {
         return IntStream.range(0, services.size()).mapToObj(index -> {
