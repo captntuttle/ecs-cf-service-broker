@@ -1,6 +1,7 @@
 package com.emc.ecs.cloudfoundry.broker.model;
 
-import org.springframework.cloud.servicebroker.model.Plan;
+//import org.springframework.cloud.servicebroker.model.Plan;
+import org.springframework.cloud.servicebroker.model.catalog.Plan;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -42,8 +43,18 @@ public class PlanProxy {
         this.serviceSettings = serviceSettings;
     }
 
+//    Plan unproxy() {
+//        return new Plan(id, name, description, metadata.unproxy(), free);
+//    }
+
     Plan unproxy() {
-        return new Plan(id, name, description, metadata.unproxy(), free);
+        return Plan.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .metadata(metadata.unproxy())
+                .free(free)
+                .build();
     }
 
     public String getId() {

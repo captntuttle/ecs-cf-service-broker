@@ -1,9 +1,12 @@
 package com.emc.ecs.cloudfoundry.broker.model;
 
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
-import org.springframework.cloud.servicebroker.model.DashboardClient;
-import org.springframework.cloud.servicebroker.model.Plan;
-import org.springframework.cloud.servicebroker.model.ServiceDefinition;
+//import org.springframework.cloud.servicebroker.model.DashboardClient;
+import org.springframework.cloud.servicebroker.model.catalog.DashboardClient;
+//import org.springframework.cloud.servicebroker.model.Plan;
+import org.springframework.cloud.servicebroker.model.catalog.Plan;
+//import org.springframework.cloud.servicebroker.model.ServiceDefinition;
+import org.springframework.cloud.servicebroker.model.catalog.ServiceDefinition;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -66,9 +69,22 @@ public class ServiceDefinitionProxy {
         if ((boolean) this.getServiceSettings().getOrDefault("file-accessible", false))
             requires.add("volume_mount");
 
-        return new ServiceDefinition(id, name, description, bindable,
-                planUpdatable, realPlans, tags, metadata, requires,
-                realDashboardClient);
+//        return new ServiceDefinition(id, name, description, bindable,
+//                planUpdatable, realPlans, tags, metadata, requires,
+//                realDashboardClient);
+
+        return ServiceDefinition.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .bindable(bindable)
+                .planUpdateable(planUpdatable)
+                .plans(realPlans)
+                .tags(tags)
+                .metadata(metadata)
+                .requires(requires)
+                .dashboardClient(realDashboardClient)
+                .build();
     }
 
     public Boolean getActive() {

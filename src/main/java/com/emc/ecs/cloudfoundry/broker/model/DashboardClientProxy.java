@@ -1,6 +1,7 @@
 package com.emc.ecs.cloudfoundry.broker.model;
 
-import org.springframework.cloud.servicebroker.model.DashboardClient;
+//import org.springframework.cloud.servicebroker.model.DashboardClient;
+import org.springframework.cloud.servicebroker.model.catalog.DashboardClient;
 import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unused")
@@ -21,8 +22,16 @@ public class DashboardClientProxy {
         this.redirectUrl = redirectUrl;
     }
 
+//    DashboardClient unproxy() {
+//        return new DashboardClient(id, secret, redirectUrl);
+//    }
+
     DashboardClient unproxy() {
-        return new DashboardClient(id, secret, redirectUrl);
+        return DashboardClient.builder()
+                .id(id)
+                .secret(secret)
+                .redirectUri(redirectUrl)
+                .build();
     }
 
     public String getId() {

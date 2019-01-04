@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.1.RELEASE'
+        springBootVersion = '2.1.1.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE')
+        classpath('io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE')
     }
 }
 
@@ -21,7 +21,7 @@ apply plugin: 'jacoco'
 
 jar {
     baseName = 'ecs-cf-service-broker'
-    version = '0.0.1-SNAPSHOT'
+    version = '2.0.0-SNAPSHOT'
 }
 
 sourceCompatibility = 1.8
@@ -41,8 +41,11 @@ dependencies {
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-jersey', version: springBootVersion)
     compile(group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion)
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion)
+    compile(group: 'org.glassfish.jersey.bundles.repackaged', name: 'jersey-guava', version: '2.25.1')
 
-    compile(group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-service-broker', version: springCloudServiceBrokerVersion)
+//    compile(group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-service-broker', version: springCloudServiceBrokerVersion)
+
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-open-service-broker-webmvc', version: '2.1.0.RELEASE')
 	
     compile(group: 'com.emc.ecs', name: 'object-client', version: '3.1.1'){
     	exclude module: "slf4j-log4j12"
