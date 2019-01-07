@@ -22,6 +22,8 @@ import org.springframework.cloud.servicebroker.model.binding.DeleteServiceInstan
 import org.springframework.cloud.servicebroker.model.binding.DeleteServiceInstanceBindingResponse;
 import org.springframework.cloud.servicebroker.model.instance.DeleteServiceInstanceResponse;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceBindingService;
+
+
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBException;
@@ -108,7 +110,7 @@ public class EcsServiceInstanceBindingService
 
         // this is hacky -- returns useless object to satisfy return type.
         // but it might work
-        // delete workflow should be reviewed in order to avoid this
+        // delete-workflow should be reviewed in order to avoid this
         return DeleteServiceInstanceBindingResponse.builder().build();
     }
 

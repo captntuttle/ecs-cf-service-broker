@@ -10,9 +10,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceBindingExistsException;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceDoesNotExistException;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
-import org.springframework.cloud.servicebroker.model.VolumeMount;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceBindingRequest;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceAppBindingResponse;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.binding.CreateServiceInstanceBindingRequest;
+//import org.springframework.cloud.servicebroker.model.VolumeMount;
+import org.springframework.cloud.servicebroker.model.binding.VolumeMount;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +64,8 @@ public class BucketBindingWorkflowTest {
 
             Context("without binding ID conflict", () -> {
                 BeforeEach(() -> {
-                    CreateServiceInstanceBindingRequest req = bucketBindingRequestFixture();
+//                    CreateServiceInstanceBindingRequest req = bucketBindingRequestFixture();
+                    CreateServiceInstanceBindingRequest req = bucketBindingExportRequestFixture();
                     workflow = workflow.withCreateRequest(req);
                     when(ecs.userExists(eq(BINDING_ID))).thenReturn(false);
                 });
