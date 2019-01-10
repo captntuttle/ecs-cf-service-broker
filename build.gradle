@@ -53,7 +53,7 @@ dependencies {
     compile('com.google.code.gson:gson:2.8.2')
 
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion)
-    testCompile(group: 'org.springframework.cloud', name: 'spring-cloud-open-service-broker-autoconfigure', version: '2.1.0.RELEASE')
+    testCompile(group: 'org.springframework.cloud', name: 'spring-cloud-open-service-broker-autoconfigure', version: '2.1.0.RELEASE', classifier: "tests")
 //    testCompile(group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-service-broker', version: springCloudServiceBrokerVersion, classifier: "tests")
 //    testCompile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-open-service-broker-webmvc', version: '2.1.0.RELEASE', classifier: "tests")
     testCompile(group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.5.1')

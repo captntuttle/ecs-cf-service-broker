@@ -10,9 +10,15 @@ import org.springframework.cloud.servicebroker.model.*;
 import org.springframework.cloud.servicebroker.model.binding.*;
 //import org.springframework.cloud.servicebroker.model.fixture.ServiceInstanceBindingFixture;
 //import org.springframework.cloud.servicebroker.model.fixture.ServiceInstanceFixture;
+import org.springframework.cloud.servicebroker.model.catalog.ServiceDefinition;
 import org.springframework.cloud.servicebroker.model.instance.CreateServiceInstanceRequest;
 import org.springframework.cloud.servicebroker.model.instance.DeleteServiceInstanceRequest;
 import org.springframework.cloud.servicebroker.model.instance.UpdateServiceInstanceRequest;
+
+import org.springframework.cloud.servicebroker.model.Context;
+import org.springframework.cloud.servicebroker.model.CloudFoundryContext;
+import org.springframework.cloud.servicebroker.autoconfigure.web.fixture.ServiceFixture;
+import org.springframework.cloud.servicebroker.model.binding.BindResource;
 
 
 import java.util.*;
@@ -212,6 +218,7 @@ public class Fixtures {
                 .serviceDefinitionId(BUCKET_SERVICE_ID)
                 .planId(BUCKET_PLAN_ID1)
                 .serviceInstanceId(BUCKET_NAME)
+                .parameters(params)
                 .build();
     }
 
@@ -406,75 +413,156 @@ public class Fixtures {
                 .build();
     }
 
-//    public static ServiceInstance serviceInstanceFixture() {
+    /* Consider what to do to clean this up
+    * perhaps re-creating the fixture that was removed */
+
+    public static Map<String, Object> getParameters() {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("text", "abcdefg");
+        parameters.put("number", 1234);
+        parameters.put("flag", true);
+
+        Map<String, Object> nested = new HashMap<String, Object>();
+        nested.put("text2", "zyxwvu");
+        nested.put("number2", 9876);
+        nested.put("flag2", true);
+
+        parameters.put("nested", nested);
+
+        return parameters;
+    }
+
+    public static Context getCloudFoundryContext() {
+        return CloudFoundryContext.builder()
+                .organizationGuid("org-guid-one")
+                .spaceGuid("space-guid-one")
+                .build();
+    }
+
+    public static ServiceInstanceBinding getServiceInstanceBinding() {
+        ServiceDefinition serviceDefinition = ServiceFixture.getSimpleService();
+        return new ServiceInstanceBinding(CreateServiceInstanceBindingRequest.builder()
+                .serviceDefinitionId(serviceDefinition.getId())
+                .planId(serviceDefinition.getPlans().get(0).getId())
+                .bindResource(BindResource.builder()
+                        .appGuid("app_guid")
+                        .route("http://route.example.com")
+                        .build())
+                .parameters(getParameters())
+                .bindingId("service_instance_binding_id")
+                .serviceInstanceId("service-instance-one-id")
+                .build());
+    }
+
+    public static ServiceInstance serviceInstanceFixture() {
 //        return new ServiceInstance(ServiceInstanceFixture
 //                .buildCreateServiceInstanceRequest(false));
-//    }
-//
-//    public static ServiceInstanceBinding bindingInstanceFixture()
-//            throws EcsManagementClientException,
-//            EcsManagementResourceNotFoundException {
-//        Map<String, Object> creds = new HashMap<>();
-//        creds.put("accessKey", "user");
-//        creds.put("bucket", "bucket");
-//        creds.put("secretKey", "password");
-//        creds.put("endpoint", OBJ_ENDPOINT);
+        ServiceDefinition serviceDefinition = ServiceFixture.getSimpleService();
+
+
+        return new ServiceInstance(CreateServiceInstanceRequest.builder()
+                .serviceDefinitionId(serviceDefinition.getId())
+                .planId(serviceDefinition.getPlans().get(0).getId())
+                .context(getCloudFoundryContext())
+                .parameters(getParameters())
+                .serviceInstanceId("service-instance-id")
+                .asyncAccepted(false)
+                .build());
+    }
+
+    public static ServiceInstanceBinding bindingInstanceFixture()
+            throws EcsManagementClientException,
+            EcsManagementResourceNotFoundException {
+        Map<String, Object> creds = new HashMap<>();
+        creds.put("accessKey", "user");
+        creds.put("bucket", "bucket");
+        creds.put("secretKey", "password");
+        creds.put("endpoint", OBJ_ENDPOINT);
 //        ServiceInstanceBinding binding = new ServiceInstanceBinding(
 //                ServiceInstanceBindingFixture.buildCreateAppBindingRequest());
-//        binding.setBindingId("service-inst-bind-one-id");
-//        binding.setCredentials(creds);
-//        return binding;
-//    }
+        ServiceInstanceBinding binding = getServiceInstanceBinding();
+        binding.setBindingId("service-inst-bind-one-id");
+        binding.setCredentials(creds);
+        return binding;
+    }
 
-//    public static ServiceInstanceBinding bindingInstanceVolumeMountFixture()
-//            throws EcsManagementClientException,
-//            EcsManagementResourceNotFoundException {
-//        Map<String, Object> creds = new HashMap<>();
-//        creds.put("accessKey", "user");
-//        creds.put("bucket", "bucket");
-//        creds.put("secretKey", "password");
-//        creds.put("endpoint", OBJ_ENDPOINT);
-////        ServiceInstanceBinding binding = new ServiceInstanceBinding(
-////                ServiceInstanceBindingFixture.buildCreateAppBindingRequest());
-//        ServiceInstanceBinding binding = new ServiceInstanceBinding(ServiceInstanceBinding);
-//        binding.setBindingId("service-inst-bind-one-id");
-//        binding.setCredentials(creds);
-//        Map<String, Object> opts = new HashMap<>();
-//        opts.put("source", "nfs://127.0.0.1/ns1/service-inst-id/");
-//        opts.put("uid", "456");
+    public static ServiceInstanceBinding bindingInstanceVolumeMountFixture()
+            throws EcsManagementClientException,
+            EcsManagementResourceNotFoundException {
+        Map<String, Object> creds = new HashMap<>();
+        creds.put("accessKey", "user");
+        creds.put("bucket", "bucket");
+        creds.put("secretKey", "password");
+        creds.put("endpoint", OBJ_ENDPOINT);
+//        ServiceInstanceBinding binding = new ServiceInstanceBinding(
+//                ServiceInstanceBindingFixture.buildCreateAppBindingRequest());
+        ServiceInstanceBinding binding = getServiceInstanceBinding();
+        binding.setBindingId("service-inst-bind-one-id");
+        binding.setCredentials(creds);
+        Map<String, Object> opts = new HashMap<>();
+        opts.put("source", "nfs://127.0.0.1/ns1/service-inst-id/");
+        opts.put("uid", "456");
 //        List<VolumeMount> mounts = Collections.singletonList(
 //                new VolumeMount("nfsv3driver", "/var/vcap/data/" + BINDING_ID,
 //                        VolumeMount.Mode.READ_WRITE, VolumeMount.DeviceType.SHARED,
 //                        new SharedVolumeDevice("123", opts))
 //        );
-//        binding.setVolumeMounts(mounts);
-//        return binding;
-//    }
 
-//    public static ServiceInstanceBinding bindingRemoteAccessFixture()
-//            throws EcsManagementClientException,
-//            EcsManagementResourceNotFoundException {
-//        Map<String, Object> creds = new HashMap<>();
-//        creds.put("accessKey", "user");
-//        creds.put("instanceId", "bucket");
-//        creds.put("secretKey", "password");
+        List<VolumeMount> mounts = Collections.singletonList(
+                VolumeMount.builder()
+                        .driver("nfsv3driver")
+                        .containerDir("/var/vcap/data/" + BINDING_ID)
+                        .mode(VolumeMount.Mode.READ_WRITE)
+                        .deviceType(VolumeMount.DeviceType.SHARED)
+                        .device(SharedVolumeDevice.builder()
+                                .volumeId("123")
+                                .mountConfig(opts)
+                                .build())
+                        .build());
+
+        binding.setVolumeMounts(mounts);
+        return binding;
+    }
+
+    public static ServiceInstanceBinding bindingRemoteAccessFixture()
+            throws EcsManagementClientException,
+            EcsManagementResourceNotFoundException {
+        Map<String, Object> creds = new HashMap<>();
+        creds.put("accessKey", "user");
+        creds.put("instanceId", "bucket");
+        creds.put("secretKey", "password");
 //        ServiceInstanceBinding binding = new ServiceInstanceBinding(
 //                ServiceInstanceBindingFixture.buildCreateAppBindingRequest());
-//        binding.setBindingId("service-inst-bind-one-id");
-//        binding.setCredentials(creds);
-//        Map<String, Object> parameters = new HashMap<>();
-//        parameters.put("remote_connection", true);
-//        binding.setParameters(parameters);
-//        return binding;
-//    }
-//
-//    public static DeleteServiceInstanceBindingRequest namespaceBindingRemoveFixture() {
+        ServiceInstanceBinding binding = getServiceInstanceBinding();
+        binding.setBindingId("service-inst-bind-one-id");
+        binding.setCredentials(creds);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("remote_connection", true);
+        binding.setParameters(parameters);
+        return binding;
+    }
+
+    public static DeleteServiceInstanceBindingRequest namespaceBindingRemoveFixture() {
 //        return new DeleteServiceInstanceBindingRequest(NAMESPACE, BINDING_ID,
 //                NAMESPACE_SERVICE_ID, NAMESPACE_PLAN_ID1, null);
-//    }
-//
-//    public static DeleteServiceInstanceBindingRequest bucketBindingRemoveFixture() {
+        return DeleteServiceInstanceBindingRequest.builder()
+                .serviceInstanceId(NAMESPACE)
+                .serviceDefinitionId(BINDING_ID)
+                .planId(NAMESPACE_SERVICE_ID)
+                .bindingId(NAMESPACE_PLAN_ID1)
+                .serviceDefinition(null)
+                .build();
+    }
+
+    public static DeleteServiceInstanceBindingRequest bucketBindingRemoveFixture() {
 //        return new DeleteServiceInstanceBindingRequest(SERVICE_INSTANCE_ID, BINDING_ID,
 //                BUCKET_SERVICE_ID, BUCKET_PLAN_ID1, null);
-//    }
+        return DeleteServiceInstanceBindingRequest.builder()
+                .serviceInstanceId(SERVICE_INSTANCE_ID)
+                .serviceDefinitionId(BINDING_ID)
+                .planId(BUCKET_SERVICE_ID)
+                .bindingId(BUCKET_PLAN_ID1)
+                .serviceDefinition(null)
+                .build();
+    }
 }

@@ -8,7 +8,8 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
-import org.springframework.cloud.servicebroker.model.CreateServiceInstanceRequest;
+//import org.springframework.cloud.servicebroker.model.CreateServiceInstanceRequest;
+import org.springframework.cloud.servicebroker.model.instance.CreateServiceInstanceRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +66,9 @@ public class RemoteConnectionInstanceWorkflowTest {
                 BeforeEach(() -> {
                     params.put("remote_connection", remoteConnect(BUCKET_NAME, REMOTE_CONNECT_KEY));
                     CreateServiceInstanceRequest createReq = bucketCreateRequestFixture(params)
-                            .withServiceInstanceId(SERVICE_INSTANCE_ID);
+//                            .withServiceInstanceId(SERVICE_INSTANCE_ID)
+                            ;
+//                    CreateServiceInstanceRequest createReq = bucketCreateRequestFixture(params).
                     workflow.withCreateRequest(createReq);
                 });
 

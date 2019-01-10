@@ -18,8 +18,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceBindingExistsException;
-import org.springframework.cloud.servicebroker.model.SharedVolumeDevice;
-import org.springframework.cloud.servicebroker.model.VolumeMount;
+//import org.springframework.cloud.servicebroker.model.SharedVolumeDevice;
+//import org.springframework.cloud.servicebroker.model.VolumeMount;
+import org.springframework.cloud.servicebroker.model.binding.SharedVolumeDevice;
+import org.springframework.cloud.servicebroker.model.binding.VolumeMount;
+
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
