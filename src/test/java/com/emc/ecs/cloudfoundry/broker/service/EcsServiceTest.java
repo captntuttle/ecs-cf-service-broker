@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -27,11 +28,16 @@ import java.util.Map;
 
 import static com.emc.ecs.common.Fixtures.*;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
+//import static org.mockito.Matchers.any;
+//import static org.mockito.Matchers.anyInt;
+//import static org.mockito.Matchers.anyString;
+//import static org.mockito.Matchers.eq;
+//import static org.mockito.Matchers.same;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
@@ -207,15 +213,18 @@ public class EcsServiceTest {
 
         ArgumentCaptor<ObjectBucketCreate> createCaptor = ArgumentCaptor
                 .forClass(ObjectBucketCreate.class);
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketAction.class, times(1));
+
         BucketAction.create(same(connection), createCaptor.capture());
         ObjectBucketCreate create = createCaptor.getValue();
+
+
         assertEquals(PREFIX + BUCKET_NAME, create.getName());
         assertNull(create.getIsEncryptionEnabled());
         assertNull(create.getIsStaleAllowed());
         assertEquals(NAMESPACE, create.getNamespace());
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketQuotaAction.class, times(1));
         BucketQuotaAction.create(same(connection), eq(PREFIX + BUCKET_NAME),
                 eq(NAMESPACE), eq(5), eq(4));
     }
@@ -246,7 +255,7 @@ public class EcsServiceTest {
 
         ArgumentCaptor<ObjectBucketCreate> createCaptor = ArgumentCaptor
                 .forClass(ObjectBucketCreate.class);
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketAction.class, times(1));
         BucketAction.create(same(connection), createCaptor.capture());
 
         ObjectBucketCreate create = createCaptor.getValue();
@@ -257,7 +266,7 @@ public class EcsServiceTest {
         assertTrue(create.getFilesystemEnabled());
         assertEquals("s3", create.getHeadType());
 
-        PowerMockito.verifyStatic(times(0));
+        PowerMockito.verifyStatic(ObjectBucketCreate.class, times(0));
         BucketQuotaAction.create(any(Connection.class), anyString(),
                 anyString(), anyInt(), anyInt());
     }
@@ -288,7 +297,7 @@ public class EcsServiceTest {
 
         ArgumentCaptor<ObjectBucketCreate> createCaptor = ArgumentCaptor
                 .forClass(ObjectBucketCreate.class);
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(ObjectBucketCreate.class, times(1));
         BucketAction.create(same(connection), createCaptor.capture());
 
         ObjectBucketCreate create = createCaptor.getValue();
@@ -298,7 +307,7 @@ public class EcsServiceTest {
         assertTrue(create.getFilesystemEnabled());
         assertEquals(NAMESPACE, create.getNamespace());
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(ObjectBucketCreate.class, times(1));
         BucketQuotaAction.create(same(connection), eq(PREFIX + BUCKET_NAME),
                 eq(NAMESPACE), eq(5), eq(4));
     }
@@ -343,7 +352,7 @@ public class EcsServiceTest {
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> nsCaptor = ArgumentCaptor.forClass(String.class);
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketQuotaAction.class, times(1));
         BucketQuotaAction.delete(same(connection), idCaptor.capture(),
                 nsCaptor.capture());
         assertEquals(PREFIX + BUCKET_NAME, idCaptor.getValue());
@@ -381,7 +390,7 @@ public class EcsServiceTest {
         ArgumentCaptor<Integer> warnCaptor = ArgumentCaptor
                 .forClass(Integer.class);
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketQuotaAction.class, times(1));
         BucketQuotaAction.create(same(connection), idCaptor.capture(),
                 nsCaptor.capture(), limitCaptor.capture(),
                 warnCaptor.capture());
@@ -421,7 +430,7 @@ public class EcsServiceTest {
         ArgumentCaptor<Integer> warnCaptor = ArgumentCaptor
                 .forClass(Integer.class);
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketQuotaAction.class, times(1));
         BucketQuotaAction.create(same(connection), idCaptor.capture(),
                 nsCaptor.capture(), limitCaptor.capture(),
                 warnCaptor.capture());
@@ -456,7 +465,7 @@ public class EcsServiceTest {
         ArgumentCaptor<Integer> warnCaptor = ArgumentCaptor
                 .forClass(Integer.class);
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(BucketQuotaAction.class, times(1));
         BucketQuotaAction.create(same(connection), idCaptor.capture(),
                 nsCaptor.capture(), limitCaptor.capture(),
                 warnCaptor.capture());
@@ -490,12 +499,12 @@ public class EcsServiceTest {
 
         ecs.removeUserFromBucket(BUCKET_NAME, USER1);
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(BucketAclAction.class);
         BucketAclAction.get(eq(connection), eq(PREFIX + BUCKET_NAME),
                 eq(NAMESPACE));
         ArgumentCaptor<BucketAcl> aclCaptor = ArgumentCaptor
                 .forClass(BucketAcl.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(BucketAclAction.class);
         BucketAclAction.update(eq(connection), eq(PREFIX + BUCKET_NAME),
                 aclCaptor.capture());
         List<BucketUserAcl> actualUserAcl = aclCaptor.getValue().getAcl()
@@ -511,7 +520,7 @@ public class EcsServiceTest {
     public void deleteUser() throws EcsManagementClientException {
         PowerMockito.mockStatic(ObjectUserAction.class);
         ecs.deleteUser(USER1);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(ObjectUserAction.class);
         ObjectUserAction.delete(same(connection), eq(PREFIX + USER1));
     }
 
@@ -536,7 +545,7 @@ public class EcsServiceTest {
         assertEquals(4, quota.get(WARN).longValue());
         assertEquals(5, quota.get(LIMIT).longValue());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
 
         ArgumentCaptor<NamespaceCreate> createCaptor = ArgumentCaptor
                 .forClass(NamespaceCreate.class);
@@ -548,7 +557,7 @@ public class EcsServiceTest {
         assertNull(create.getIsStaleAllowed());
         assertEquals(Integer.valueOf(5), create.getDefaultBucketBlockSize());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceQuotaAction.class);
 
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<NamespaceQuotaParam> quotaParamCaptor = ArgumentCaptor
@@ -581,7 +590,7 @@ public class EcsServiceTest {
         Map<String, Object> serviceSettings = ecs.changeNamespacePlan(NAMESPACE, service, plan, params);
         assertNull(serviceSettings.get(QUOTA));
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
         NamespaceAction.update(same(connection), idCaptor.capture(),
                 updateCaptor.capture());
         assertEquals(PREFIX + NAMESPACE, idCaptor.getValue());
@@ -616,7 +625,7 @@ public class EcsServiceTest {
         assertEquals(4, quota.get(WARN).longValue());
         assertEquals(5, quota.get(LIMIT).longValue());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
         NamespaceAction.create(same(connection), createCaptor.capture());
         NamespaceCreate create = createCaptor.getValue();
         assertEquals(PREFIX + NAMESPACE, create.getNamespace());
@@ -626,7 +635,7 @@ public class EcsServiceTest {
         assertEquals(null, create.getIsStaleAllowed());
         assertEquals(Integer.valueOf(5), create.getDefaultBucketBlockSize());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceQuotaAction.class);
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<NamespaceQuotaParam> quotaParamCaptor = ArgumentCaptor
                 .forClass(NamespaceQuotaParam.class);
@@ -674,7 +683,7 @@ public class EcsServiceTest {
         assertEquals(4, quota.get(WARN).longValue());
         assertEquals(5, quota.get(LIMIT).longValue());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
         NamespaceAction.create(same(connection), createCaptor.capture());
         NamespaceCreate create = createCaptor.getValue();
         assertEquals(PREFIX + NAMESPACE, create.getNamespace());
@@ -684,7 +693,7 @@ public class EcsServiceTest {
         assertTrue(create.getIsStaleAllowed());
         assertEquals(Integer.valueOf(5), create.getDefaultBucketBlockSize());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceQuotaAction.class);
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<NamespaceQuotaParam> quotaParamCaptor = ArgumentCaptor
                 .forClass(NamespaceQuotaParam.class);
@@ -730,7 +739,7 @@ public class EcsServiceTest {
         assertEquals(4, quota.get(WARN).longValue());
         assertEquals(5, quota.get(LIMIT).longValue());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
         NamespaceAction.update(same(connection), idCaptor.capture(),
                 updateCaptor.capture());
         NamespaceUpdate update = updateCaptor.getValue();
@@ -765,7 +774,7 @@ public class EcsServiceTest {
         Map<String, Object> returnRetention = (Map<String, Object>) serviceSettings.get(RETENTION);
         assertEquals(ONE_YEAR_IN_SECS, returnRetention.get(ONE_YEAR));
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
         ArgumentCaptor<NamespaceCreate> createCaptor = ArgumentCaptor
                 .forClass(NamespaceCreate.class);
         NamespaceAction.create(same(connection), createCaptor.capture());
@@ -775,7 +784,7 @@ public class EcsServiceTest {
         assertTrue(create.getIsStaleAllowed());
         assertTrue(create.getIsComplianceEnabled());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceRetentionAction.class);
         ArgumentCaptor<RetentionClassCreate> retentionCreateCaptor = ArgumentCaptor
                 .forClass(RetentionClassCreate.class);
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
@@ -813,7 +822,7 @@ public class EcsServiceTest {
         Map<String, Object> returnRetention = (Map<String, Object>) serviceSettings.get(RETENTION);
         assertEquals(THIRTY_DAYS_IN_SEC, returnRetention.get(THIRTY_DAYS));
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceRetentionAction.class);
         NamespaceRetentionAction.create(same(connection), nsCaptor.capture(),
                 createCaptor.capture());
         assertEquals(PREFIX + NAMESPACE, nsCaptor.getValue());
@@ -842,7 +851,7 @@ public class EcsServiceTest {
         Map<String, Object> serviceSettings = ecs.changeNamespacePlan(NAMESPACE, service, plan, params);
         assertNull(serviceSettings.get(RETENTION));
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceRetentionAction.class);
 
         ArgumentCaptor<String> nsCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> rcCaptor = ArgumentCaptor.forClass(String.class);
@@ -880,7 +889,7 @@ public class EcsServiceTest {
         Map<String, Object> returnRetention = (Map<String, Object>) serviceSettings.get(RETENTION);
         assertEquals(THIRTY_DAYS_IN_SEC, returnRetention.get(THIRTY_DAYS));
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceRetentionAction.class);
         NamespaceRetentionAction.update(same(connection), nsCaptor.capture(),
                 rcCaptor.capture(), updateCaptor.capture());
         assertEquals(PREFIX + NAMESPACE, nsCaptor.getValue());
@@ -911,7 +920,7 @@ public class EcsServiceTest {
         Map<String, Object> serviceSettings = ecs.createBucket(BUCKET_NAME, service, plan, params);
         assertEquals(THIRTY_DAYS_IN_SEC, serviceSettings.get(DEFAULT_RETENTION));
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(BucketRetentionAction.class);
         BucketRetentionAction.update(same(connection), eq(NAMESPACE),
                 eq(PREFIX + BUCKET_NAME), eq(THIRTY_DAYS_IN_SEC));
     }
@@ -929,7 +938,7 @@ public class EcsServiceTest {
         ecs.deleteNamespace(NAMESPACE);
 
         ArgumentCaptor<String> nsCaptor = ArgumentCaptor.forClass(String.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NamespaceAction.class);
         NamespaceAction.delete(same(connection), nsCaptor.capture());
         assertEquals(PREFIX + NAMESPACE, nsCaptor.getValue());
     }
@@ -959,7 +968,7 @@ public class EcsServiceTest {
         ArgumentCaptor<String> nsCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> userCaptor = ArgumentCaptor
                 .forClass(String.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(ObjectUserAction.class);
         ObjectUserAction.create(same(connection), userCaptor.capture(),
                 nsCaptor.capture());
         assertEquals(PREFIX + NAMESPACE, nsCaptor.getValue());
@@ -1095,12 +1104,12 @@ public class EcsServiceTest {
         ecs.addExportToBucket(BUCKET_NAME, EXPORT_NAME);
 
         ArgumentCaptor<String> listPathCaptor = ArgumentCaptor.forClass(String.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NFSExportAction.class);
         NFSExportAction.list(same(connection), listPathCaptor.capture());
         assertEquals(absolutePath, listPathCaptor.getValue());
 
         ArgumentCaptor<String> createPathCaptor = ArgumentCaptor.forClass(String.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NFSExportAction.class);
         NFSExportAction.create(same(connection), createPathCaptor.capture());
         assertEquals(absolutePath, createPathCaptor.getValue());
     }
@@ -1123,12 +1132,12 @@ public class EcsServiceTest {
         ecs.addExportToBucket(BUCKET_NAME, null);
 
         ArgumentCaptor<String> listPathCaptor = ArgumentCaptor.forClass(String.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NFSExportAction.class);
         NFSExportAction.list(same(connection), listPathCaptor.capture());
         assertEquals(absolutePath, listPathCaptor.getValue());
 
         ArgumentCaptor<String> createPathCaptor = ArgumentCaptor.forClass(String.class);
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(NFSExportAction.class);
         NFSExportAction.create(same(connection), createPathCaptor.capture());
         assertEquals(absolutePath, createPathCaptor.getValue());
     }

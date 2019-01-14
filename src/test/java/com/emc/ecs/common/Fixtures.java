@@ -204,7 +204,8 @@ public class Fixtures {
         return CreateServiceInstanceRequest.builder()
                 .serviceDefinitionId(NAMESPACE_SERVICE_ID)
                 .planId(NAMESPACE_PLAN_ID1)
-                .serviceInstanceId(NAMESPACE)
+                .context(getCloudFoundryContext())
+                .serviceInstanceId(SERVICE_INSTANCE_ID)
                 .parameters(params)
                 .build();
     }
@@ -217,8 +218,9 @@ public class Fixtures {
         return CreateServiceInstanceRequest.builder()
                 .serviceDefinitionId(BUCKET_SERVICE_ID)
                 .planId(BUCKET_PLAN_ID1)
-                .serviceInstanceId(BUCKET_NAME)
+                .context(getCloudFoundryContext())
                 .parameters(params)
+                .serviceInstanceId(BUCKET_NAME)
                 .build();
     }
 
@@ -230,7 +232,8 @@ public class Fixtures {
         return CreateServiceInstanceRequest.builder()
                 .serviceDefinitionId(BUCKET_SERVICE_ID)
                 .planId(BUCKET_PLAN_ID1)
-                .serviceInstanceId(BUCKET_NAME)
+                .context(getCloudFoundryContext())
+                .serviceInstanceId(SERVICE_INSTANCE_ID)
                 .parameters(params)
                 .build();
     }
@@ -369,7 +372,9 @@ public class Fixtures {
         return CreateServiceInstanceBindingRequest.builder()
                 .serviceDefinitionId(BUCKET_SERVICE_ID)
                 .planId(BUCKET_PLAN_ID1)
+                .context(getCloudFoundryContext())
                 .bindResource(bindResource)
+                .parameters(parameters)
                 .bindingId(BINDING_ID)
                 .serviceInstanceId(SERVICE_INSTANCE_ID)
                 .build();

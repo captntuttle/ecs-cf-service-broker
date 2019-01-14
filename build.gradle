@@ -57,8 +57,8 @@ dependencies {
 //    testCompile(group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-service-broker', version: springCloudServiceBrokerVersion, classifier: "tests")
 //    testCompile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-open-service-broker-webmvc', version: '2.1.0.RELEASE', classifier: "tests")
     testCompile(group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.5.1')
-    testCompile(group: 'org.powermock', name: 'powermock-api-mockito', version: '1.7.1')
-    testCompile(group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.1')
+    testCompile(group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.0')
+    testCompile(group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.0')
     testCompile(group: 'com.github.paulcwarren', name: 'ginkgo4j', version: '1.0.7')
 
     

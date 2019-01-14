@@ -65,10 +65,9 @@ public class RemoteConnectionInstanceWorkflowTest {
 
                 BeforeEach(() -> {
                     params.put("remote_connection", remoteConnect(BUCKET_NAME, REMOTE_CONNECT_KEY));
-                    CreateServiceInstanceRequest createReq = bucketCreateRequestFixture(params)
-//                            .withServiceInstanceId(SERVICE_INSTANCE_ID)
-                            ;
-//                    CreateServiceInstanceRequest createReq = bucketCreateRequestFixture(params).
+                    CreateServiceInstanceRequest createReq = bucketCreateRequestFixture(params);
+//                            .withServiceInstanceId(SERVICE_INSTANCE_ID);
+                    createReq.setServiceInstanceId(SERVICE_INSTANCE_ID);
                     workflow.withCreateRequest(createReq);
                 });
 

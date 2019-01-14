@@ -33,10 +33,14 @@ import java.util.Map;
 
 import static com.emc.ecs.common.Fixtures.*;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+//import static org.mockito.Matchers.any;
+//import static org.mockito.Matchers.anyInt;
+//import static org.mockito.Matchers.anyString;
+//import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -77,9 +81,11 @@ public class EcsServiceInstanceBindingServiceTest {
     public void testCreateNamespaceUser()
             throws IOException, JAXBException, EcsManagementClientException {
         ServiceDefinitionProxy service = namespaceServiceFixture();
-        when(catalog.findServiceDefinition(eq(NAMESPACE_SERVICE_ID)))
-                .thenReturn(namespaceServiceFixture());
+
+//        when(catalog.findServiceDefinition(eq(NAMESPACE_SERVICE_ID)))
+//                .thenReturn(namespaceServiceFixture());
         when(ecs.userExists(BINDING_ID)).thenReturn(false);
+
         when(ecs.getObjectEndpoint()).thenReturn(OBJ_ENDPOINT);
         UserSecretKey userSecretKey = new UserSecretKey();
         userSecretKey.setSecretKey(TEST_KEY);
