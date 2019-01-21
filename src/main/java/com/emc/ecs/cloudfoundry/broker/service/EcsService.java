@@ -140,8 +140,9 @@ public class EcsService {
     }
 
     private boolean bucketExists(String id) throws EcsManagementClientException {
-        return BucketAction.exists(connection, prefix(id),
+        boolean retval = BucketAction.exists(connection, prefix(id),
                 broker.getNamespace());
+        return retval;
     }
 
     UserSecretKey createUser(String id) {

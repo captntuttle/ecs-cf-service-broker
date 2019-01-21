@@ -31,6 +31,9 @@ import org.junit.runners.Suite.SuiteClasses;
         ObjectUserSecretActionTest.class,
         ReplicationGroupActionTest.class,
         EcsServiceTest.class,
+
+        NewEcsServiceTest.class,
+
         CatalogConfigTest.class,
         ServiceDefinitionProxyTest.class,
         ServiceInstanceBindingRepositoryTest.class,
