@@ -54,7 +54,7 @@ public class BucketBindingWorkflowTest {
                 BeforeEach(() ->
                         when(ecs.userExists(eq(BINDING_ID))).thenReturn(true));
 
-                It("should throw an binding-exists exception", () -> {
+                It("should throw an binding-bucketExists exception", () -> {
                     try {
                         workflow.checkIfUserExists();
                     } catch (ServiceInstanceBindingExistsException e) {
@@ -102,7 +102,7 @@ public class BucketBindingWorkflowTest {
                 });
 
 
-                Context("when the service instance exists", () -> {
+                Context("when the service instance bucketExists", () -> {
                     BeforeEach(() -> {
                         // Mock out all prefix calls to return prefixed argument
                         when(ecs.prefix(anyString())).thenAnswer((Answer<String>) invocation -> {

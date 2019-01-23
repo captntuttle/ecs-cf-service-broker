@@ -54,7 +54,7 @@ public class EcsServiceTest {
     private static final String BASE_URL = "base-url";
     private static final String USE_SSL = "use-ssl";
     private static final String USER1 = "user1";
-    private static final String EXISTS = "exists";
+    private static final String EXISTS = "bucketExists";
     private static final String DEFAULT_BUCKET_QUOTA = "default-bucket-quota";
     private static final String DOMAIN_GROUP_ADMINS = "domain-group-admins";
     private static final String ACCESS_DURING_OUTAGE = "access-during-outage";

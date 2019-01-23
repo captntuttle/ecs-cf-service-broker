@@ -373,7 +373,7 @@ public class EcsServiceInstanceBindingServiceTest {
 
     /**
      * If the binding-service attempts to create a namespace user that already
-     * exists, the service will throw an error.
+     * bucketExists, the service will throw an error.
      *
      */
     @Test(expected = ServiceInstanceBindingExistsException.class)
@@ -387,7 +387,7 @@ public class EcsServiceInstanceBindingServiceTest {
 
     /**
      * If the binding-service attempts to create a bucket user that already
-     * exists, the service will throw an error.
+     * bucketExists, the service will throw an error.
      *
      * @throws EcsManagementClientException if ecs management API returns an error
      */
