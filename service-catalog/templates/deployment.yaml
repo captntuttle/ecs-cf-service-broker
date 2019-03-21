@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "service-catalog.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "service-catalog.name" . }}
+    helm.sh/chart: {{ include "service-catalog.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "service-catalog.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "service-catalog.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: ecs-service-broker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: broker_namespace
+              value: {{ .Values.broker.connectivity.namespace }}
+            - name: broker_management_endpoint
+              value: {{ .Values.broker.connectivity.management_endpoint }}
+            - name: broker_replication_group
+              value: {{ .Values.broker.connectivity.replication_group }}
+            - name: broker_username
+              value: {{ .Values.broker.connectivity.username }}
+            - name: broker_base_url
+              value: {{ .Values.broker.connectivity.base_url }}
+            - name: broker_password
+              value: {{ .Values.broker.connectivity.password }}
+            - name: broker_object_endpoint
+              value: {{ .Values.broker.connectivity.object_endpoint }}
+            - name: broker_prefix
+              value: {{ .Values.broker.service.prefix }}
+            - name: broker_repository_endpoint
+              value: ""
+            - name: broker_repository_user
+              value: ""
+            - name: broker_repository_bucket
+              value: ""
+
+            - name: broker_certificate_selector
+              value: "Yes"
+
+            - name: catalog
+
+
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
