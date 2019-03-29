@@ -9,15 +9,12 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-#nameOverride: ""
-#fullnameOverride: ""
-
-registerBroker: true
+nameOverride: ""
+fullnameOverride: ""
 
 service:
   type: ClusterIP
-  nodeport:
-    port: 30080
+  port: 80
 
 ingress:
   enabled: false
@@ -33,20 +30,6 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-broker:
-  connectivity:
-    namespace: "131118670375936839"
-    management_endpoint: https://portal.ecstestdrive.com
-    replication_group: ecstestdrivegeo
-    username: 131118670375936839-admin
-    password: ZWNmNzZiNjI0YTExODczYzJkZGVmNWU5NjQ4MzlkMjk=
-    base_url: ""
-    object_endpoint: https://object.ecstestdrive.com
-  service:
-    prefix: 131118670375936839-
-    repository_endpoint: ""
-    repository_user: ""
-
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -59,12 +42,19 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-## Basic auth credentials that can later be used to access this broker
-basicAuth:
-  ## DO NOT USE THIS DEFAULT VALUE IN PRODUCTION
-  username: username
-  ## DO NOT USE THIS DEFAULT VALUE IN PRODUCTION
-  password: password
+broker:
+  connectivity:
+    namespace: "131118670375936839"
+    management_endpoint: "https://portal.ecstestdrive.com"
+    replication_group: "ecstestdrivegeo"
+    username: "131118670375936839-admin"
+    password: "ZWNmNzZiNjI0YTExODczYzJkZGVmNWU5NjQ4MzlkMjk="
+    base_url: ""
+    object_endpoint: "https://object.ecstestdrive.com"
+  service:
+    prefix: "131118670375936839-"
+    repository_endpoint: ""
+    repository_user: ""
 
 nodeSelector: {}
 

@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: broker_namespace
-              value: {{ .Values.broker.connectivity.namespace }}
+              value: {{ .Values.broker.connectivity.namespace | quote }}
             - name: broker_management_endpoint
               value: {{ .Values.broker.connectivity.management_endpoint }}
             - name: broker_replication_group
@@ -40,33 +40,6 @@ spec:
               value: {{ .Values.broker.connectivity.object_endpoint }}
             - name: broker_prefix
               value: {{ .Values.broker.service.prefix }}
-            - name: broker_repository_endpoint
-              value: ""
-            - name: broker_repository_user
-              value: ""
-            - name: broker_repository_bucket
-              value: ""
-
-            - name: broker_certificate_selector
-              value: "Yes"
-
-            - name: catalog
-
-
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
