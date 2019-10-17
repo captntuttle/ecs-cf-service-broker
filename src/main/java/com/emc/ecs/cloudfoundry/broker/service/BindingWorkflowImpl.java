@@ -8,6 +8,7 @@ import com.emc.ecs.cloudfoundry.broker.repository.ServiceInstanceRepository;
 import org.springframework.cloud.servicebroker.model.CreateServiceInstanceAppBindingResponse;
 import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
 import org.springframework.cloud.servicebroker.model.DeleteServiceInstanceBindingRequest;
+import org.springframework.cloud.servicebroker.model.ServiceDefinition;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ abstract public class BindingWorkflowImpl implements BindingWorkflow {
     public BindingWorkflow withCreateRequest(CreateServiceInstanceBindingRequest request) {
         this.instanceId = request.getServiceInstanceId();
         this.bindingId = request.getBindingId();
+        this.service = ecs.lookupServiceDefinition(request.getServiceDefinitionId());
+        this.plan = service.findPlan(request.getPlanId());
         this.createRequest = request;
         return(this);
     }

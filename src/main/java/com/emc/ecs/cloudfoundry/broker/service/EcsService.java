@@ -260,9 +260,12 @@ public class EcsService {
 
     String getNamespaceURL(String namespace, ServiceDefinitionProxy service,
                            PlanProxy plan, Map<String, Object> parameters) {
-        parameters.putAll(plan.getServiceSettings());
-        parameters.putAll(service.getServiceSettings());
 
+            if (parameters == null) {
+                parameters = new HashMap<String, Object>();
+            }
+            parameters.putAll(plan.getServiceSettings());
+            parameters.putAll(service.getServiceSettings());
         try {
             return getNamespaceURL(namespace, parameters);
         } catch (EcsManagementClientException e) {
@@ -273,10 +276,15 @@ public class EcsService {
     private String getNamespaceURL(String namespace,
                                    Map<String, Object> parameters)
             throws EcsManagementClientException {
-        String baseUrl = (String) parameters.getOrDefault("base-url",
-                broker.getBaseUrl());
-        Boolean useSSL = (Boolean) parameters.getOrDefault("use-ssl", false);
-        return getNamespaceURL(namespace, useSSL, baseUrl);
+            String baseUrl = (String) parameters.getOrDefault("base-url",
+                    broker.getBaseUrl());
+
+            if (baseUrl != null) {
+                Boolean useSSL = (Boolean) parameters.getOrDefault("use-ssl", false);
+                return getNamespaceURL(namespace, useSSL, baseUrl);
+            } else {
+                return this.getObjectEndpoint();
+            }
     }
 
     private String getNamespaceURL(String namespace, Boolean useSSL, String baseURL)

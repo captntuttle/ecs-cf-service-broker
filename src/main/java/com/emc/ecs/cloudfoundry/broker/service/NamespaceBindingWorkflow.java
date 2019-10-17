@@ -64,6 +64,9 @@ public class NamespaceBindingWorkflow extends BindingWorkflowImpl {
         // Add s3 URL
         credentials.put("s3Url", getS3Url(endpoint, secretKey));
 
+        // Add namespace name
+        credentials.put("namespace", ecs.prefix(namespaceName));
+
         return credentials;
     }
 
